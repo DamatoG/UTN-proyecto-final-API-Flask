@@ -18,11 +18,11 @@ jwt = JWTManager(app)
 
 
 #CORS
-#cors = CORS(app, resources={ r'*': { 'origins':'*'}})
+cors = CORS(app, resources={ r'*': { 'origins':'*'}})
 CORS(app)
 
 
-data = open('Api Flask\data.json')
+data = open('data.json')
 db=json.load(data)
 
 @app.route('/', methods=["GET"])
@@ -177,6 +177,12 @@ def directores():
     return jsonify(db["directores"]), HTTPStatus.OK
 
 
+#MODULO GENERO
+#Endpoint retorna lista de genero
+@app.route("/genero", methods = ['GET'])
+def generos():
+    return jsonify(db["generos"]), HTTPStatus.OK
+
 
 
 #MODULO COMENTARIOS
@@ -189,9 +195,6 @@ def directores():
 #endpoint modifica un comentario de una pelicula segun idMovie y idComentario
 
 #endpoint elimina un comentario de una pelicula, si solo si, el usuario que la elimina esta registrado
-
-
-
 
 
 

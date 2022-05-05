@@ -22,7 +22,7 @@
             "director":"stan lee",
             "genero":"",
             "sinopsis":"Después de los eventos devastadores de 'Avengers: Infinity War', el universo está en ruinas debido a las acciones de Thanos, el Titán Loco. Con la ayuda de los aliados que quedaron, los Vengadores deberán reunirse una vez más para intentar detenerlo y restaurar el orden en el universo de una vez por todas.",
-            "url_img":"https://www.google.com/search?q=avengers+endgame&sa=X&bih=590&biw=931&rlz=1C1ALOY_esAR983AR983&hl=es-419&sxsrf=APq-WBvhSkIqHaoqLI2yEGWOLwHhfKeRGg:1646359196042&tbm=isch&source=iu&ictx=1&vet=1&fir=Tmz62Foc_OkTQM%252CLi-kupFv2BXC7M%252C_%253B5BBvxa-gtr6TyM%252CdHSh4nED2IZ9EM%252C_%253BPcfezzZqNgLiYM%252Ce8mBA4m2pMnWtM%252C_%253B0tDUK8ZWhlhH9M%252CkrwqSV_ZDr7okM%252C_%253BkWjD0jBIpjHFwM%252Cwuv4JR3CgNym0M%252C_%253BmfIrtULpYx-SsM%252CMtUn62-Ze1YA8M%252C_&usg=AI4_-kQLjQqSmsGjFG9XhM3YEViNmq0Ftg&ved=2ahUKEwiq0LX4rav2AhXpq5UCHVfrD0AQ_h16BAgOEAE#imgrc=PcfezzZqNgLiYM"
+            "url_img":"https://cdn.pixabay.com/photo/2020/11/28/03/19/iron-man-5783522_960_720.png"
         },
         {
             "id_movie":0,
@@ -58,5 +58,23 @@
         {
         "name":"Charles Chaplin",
         "director_id":3
-        }]
+        }],
+
+    "generos":[
+        {
+        "name":"accion"
+        },
+        {
+        "name":"drama"
+        },
+        {
+        "name":"ciencia ficcion"
+        },
+        {
+        "name":"terror"
+        },
+        {
+        "name":"Infantil y familiar"
+        }
+    ]
 }

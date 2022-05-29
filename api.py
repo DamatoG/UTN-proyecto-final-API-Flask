@@ -1,3 +1,4 @@
+from email.policy import HTTP
 from flask import Flask, json, jsonify, request
 from http import HTTPStatus
 import json
@@ -27,12 +28,14 @@ cors = CORS(app, resources={ r'*': { 'origins':'*'}})
 
 data = open('data.json')
 db=json.load(data)
-peliculas = db['movies']
+
 
 
 @app.route('/', methods=["GET"])
 def home():
     return ("Bienvenido a la api de peliculas")
+
+
 
 
 #LOGIN
@@ -55,7 +58,7 @@ def login():
 
 
 #MODULO PELICULAS
-#endpoint retorna todas las peliculas
+#endpoint retorna todas las peliculas -- GET
 
 @app.route("/movies", methods=["GET"])  
 def movies():
@@ -64,7 +67,6 @@ def movies():
 #endpoint retorna un pelicula segun id
 @app.route("/movie/<id>", methods=["GET"])
 def movie(id):
-    #el parametro id viene desde el cliente con el type = str. Hay que convertirlo a int
     id = int(id)
     for movie in db["movies"]:
         if movie["id_movie"] == id:
@@ -72,10 +74,20 @@ def movie(id):
         else:
             return jsonify({}), HTTPStatus.NOT_FOUND
 
+#endpoint retorna pelicula by_director
+@app.route("/movie_by_director/<id_director>", methods=["GET"])
+def movie_by_director(id_director):
+    id_director = int(id_director)
+    directores = [ d['director_id'] for d in db['directores']]
+    print (directores)
+    if id_director not in directores:
+        return jsonify({'msj':'Director inexistente'}), HTTPStatus.NOT_FOUND
+    else:
+        movies_by_director = [ m for m in db['movies'] if m['director'] == id_director]
+        return jsonify(movies_by_director), HTTPStatus.OK
 
 
-#Es necesario validar los datos que recibe el endpoint
-#endpoint crea una pelicula
+#endpoint crea una pelicula -- POST
 @app.route("/movie", methods = ["POST"])
 @jwt_required()
 def create_new_movie():
@@ -93,8 +105,8 @@ def create_new_movie():
             return jsonify(data_client), HTTPStatus.OK
     
 
-#endopoint modifica una pelucula
-#PUT
+
+#endopoint modifica una pelucula -- PUT
 @app.route("/movie/<id_movie>", methods = ["PUT"])
 @jwt_required()
 def modificar_pelicula(id_movie):
@@ -116,16 +128,6 @@ def modificar_pelicula(id_movie):
         return jsonify({'msj':'Informacion insuficiente'}), HTTPStatus.BAD_REQUEST
 
 
-            
-# def tiene_comentarios_ajenos(movie, comentarios, id_user):
-#     comentarios_otro_user = [c['id_comentario'] for c in comentarios if c['id_user'] != id_user]
-#     print (comentarios_otro_user)
-#     encontro = False
-#     for c in comentarios_otro_user:
-#         if c in movie['id_comentarios']:
-#             encontro = True
-#             break
-#     return encontro
 
 #endpoint elimina una pelicula
 #DELETE
@@ -148,20 +150,6 @@ def eliminar_pelicula(id_user, id_movie):
         return jsonify({}), HTTPStatus.BAD_REQUEST
 
 
-#Verificar si los comentarios que tiene la pelicula pertenecen al usuario que intenta eliminar la pelicula
-     
-
-
-@app.route("/user/<id>", methods = ["GET"])
-def user(id):
-    #el parametro id viene desde el cliente con el type = str. Hay que convertirlo a int
-    id = int(id)
-    for user in db["users"]:
-        if user["id_user"] == id:
-            return jsonify(user)
-    else:
-        return jsonify({}), HTTPStatus.NOT_FOUND
-
 #endpoint crea un usuario nuevo
 @app.route("/register", methods = ["POST"])
 def register():
@@ -175,15 +163,6 @@ def register():
     data_client["id_users"] = new_user_id
     db["users"].append(data_client)
     return jsonify({}), HTTPStatus.OK
-
-
-
-#endpoint modifica los datos de un usuario 
-#Put
-
-
-#endpoint elimina un usuario
-#DELETE 
 
 
 
@@ -205,13 +184,15 @@ def generos():
 #MODULO COMENTARIOS
 #endpoint retorna todos los comentarios de una pelicula segun idMovie
 #GET
-
-#endpoint retorna un unico comentario de una pelicula segun idMOvie y idComentario
-#GET
-
-#endpoint modifica un comentario de una pelicula segun idMovie y idComentario
-
-#endpoint elimina un comentario de una pelicula, si solo si, el usuario que la elimina esta registrado
+@app.route("/comentarios/<id_movie>", methods = ['GET'])
+def comentarios_movie(id_movie):
+    ids_movies = [ m['id_movie'] for m in db['movies']]
+    if int(id_movie) not in ids_movies:
+        return jsonify({'msj':'Pelicula no encontrada'}), HTTPStatus.NOT_FOUND
+    else:
+        comentarios_movie = [c for c in db['comentarios'] if c['id_movie'] == int(id_movie)]
+        print(comentarios_movie)
+        return jsonify(comentarios_movie), HTTPStatus.OK
 
 
 

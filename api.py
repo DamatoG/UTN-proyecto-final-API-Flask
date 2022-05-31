@@ -1,4 +1,3 @@
-from email.policy import HTTP
 from flask import Flask, json, jsonify, request
 from http import HTTPStatus
 import json
@@ -68,11 +67,14 @@ def movies():
 @app.route("/movie/<id>", methods=["GET"])
 def movie(id):
     id = int(id)
-    for movie in db["movies"]:
-        if movie["id_movie"] == id:
-            return jsonify(movie), HTTPStatus.OK
-        else:
-            return jsonify({}), HTTPStatus.NOT_FOUND
+    existe = False
+    while not existe:
+        for movie in db["movies"]:
+            if movie["id_movie"] == id:
+                existe = True
+                return jsonify(movie), HTTPStatus.OK
+
+    if existe: return jsonify({}), HTTPStatus.NOT_FOUND
 
 #endpoint retorna pelicula by_director
 @app.route("/movie_by_director/<id_director>", methods=["GET"])
@@ -89,7 +91,7 @@ def movie_by_director(id_director):
 
 #endpoint crea una pelicula -- POST
 @app.route("/movie", methods = ["POST"])
-@jwt_required()
+#@jwt_required()
 def create_new_movie():
     data_client = request.get_json()
 
@@ -193,6 +195,35 @@ def comentarios_movie(id_movie):
         comentarios_movie = [c for c in db['comentarios'] if c['id_movie'] == int(id_movie)]
         print(comentarios_movie)
         return jsonify(comentarios_movie), HTTPStatus.OK
+
+
+#endpoint crea nuevo comentario en una pelicula
+#POST
+@app.route('/movie/<id_movie>/comentario', methods = ['POST'])
+#@jwt_required()
+def crear_comentario(id_movie):
+    id_movie = int(id_movie)
+    data_client = request.get_json()
+    ids_movies = [m['id_movie'] for m in db['movies']]
+
+    #Valido data y que el id_movie exista
+    if ('body' in data_client and 'id_user' in data_client):
+        if id_movie in ids_movies:
+            new_comentario_id = max([c["id_comentario"] for c in db["comentarios"]]) + 1 
+            for m in db['movies']:
+                if m['id_movie'] == id_movie:
+                    m['id_comentarios'].append(new_comentario_id)
+            data_client['id_comentario'] = new_comentario_id
+            data_client['id_movie'] = id_movie
+            db['comentarios'].append(data_client)
+
+            return jsonify(data_client), HTTPStatus.OK
+        else:
+            return jsonify({'msj':'Pelicula inexistente'}), HTTPStatus.NO_CONTENT
+    else:
+        return jsonify({}), HTTPStatus.BAD_REQUEST
+
+
 
 
 

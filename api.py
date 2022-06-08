@@ -1,3 +1,4 @@
+from ast import JoinedStr
 from flask import Flask, json, jsonify, request
 from http import HTTPStatus
 import json
@@ -45,21 +46,31 @@ def login():
     username = user["username"]
     password = user["password"]
 
+    print (username, password)
     #recorro el json para saber si existe un usuario con username/password ingresado
+    existe = False
+    print ("1 ", existe)
+    id_user = 0
     for us in db['users']:
+        print (us)
         if username == us['username']  and password == us['password']:
-            #Si existe creo el token y lo envio como respuesta
-            access_token = create_access_token(identity=username)
-            return jsonify({"token": access_token, "user":username}), HTTPStatus.OK
-            #Si no existe retorno error
-        else:
-            return jsonify({'msg': 'Bad username or password'}), HTTPStatus.BAD_REQUEST
+                #Si existe creo el token y lo envio como respuesta
+            existe = True
+            id_user = us['id_user']
+            print (us['id_user'])
+    print ("2 ", existe)
+    if(existe != False):
+        access_token = create_access_token(identity=username)
+        return jsonify({"token": access_token, "user":username, "id_user": id_user}), HTTPStatus.OK
+        #Si no existe retorno error
+    else:
+        return jsonify({'msg': 'Bad username or password'}), HTTPStatus.BAD_REQUEST
 
 
 #MODULO PELICULAS
 #endpoint retorna todas las peliculas -- GET
 
-@app.route("/movies", methods=["GET"])  
+@app.route("/movies", methods=["GET"])
 def movies():
     return jsonify(db["movies"]), HTTPStatus.OK
 
@@ -88,6 +99,17 @@ def movie_by_director(id_director):
         movies_by_director = [ m for m in db['movies'] if m['director'] == id_director]
         return jsonify(movies_by_director), HTTPStatus.OK
 
+@app.route("/movie_by_user/<id_user>", methods=["GET"])
+def movie_by_user(id_user):
+    id_user = int(id_user)
+
+    #movie_by_user = [ m for m in db['movies']  if m['id_user'] == id_user]
+    return jsonify([ m for m in db['movies']  if m['id_user'] == id_user]), HTTPStatus.OK
+    # if len(movie_by_user) == 0:
+    #     return jsonify({'msj':'Sin peliculas cargadas'}), HTTPStatus.NOT_FOUND
+    # else:
+    #     return jsonify(movie_by_user), HTTPStatus.OK
+
 
 #endpoint crea una pelicula -- POST
 @app.route("/movie", methods = ["POST"])
@@ -95,7 +117,7 @@ def movie_by_director(id_director):
 def create_new_movie():
     data_client = request.get_json()
 
-    if "name_movie" and "fecha_estreno" and "director" and "genero" and "sinopsis" and "url_img" in data_client:
+    if "name_movie" and "fecha_estreno" and "director" and "genero" and "sinopsis" and "url_img" and "id_user" in data_client:
         titulos = [movie["name_movie"] for movie in db["movies"]]
     
         if data_client["name_movie"] in titulos:
@@ -228,4 +250,4 @@ def crear_comentario(id_movie):
 
 
 if __name__ == '__main__':
-    app.run(debug = True, port = 5000)
+    app.run(port = 5000)

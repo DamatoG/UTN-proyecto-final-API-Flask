@@ -1,15 +1,23 @@
 {
-  "version": 2,
-  "builds": [
-      {
-          "src": "./index.py",
-          "use": "@vercel/python"
-      }
-  ],
-  "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "/"
-      }
-  ]
+    "version": 2,
+    "builds": [
+        {
+            "src": "./index.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+                "Access-Control-Allow-Credentials": "true"
+              },
+            "continue": true,
+            "dest": "/"
+        }
+    ]
+
 }

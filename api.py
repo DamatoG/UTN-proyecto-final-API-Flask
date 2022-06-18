@@ -100,6 +100,7 @@ def movie_by_director(id_director):
         return jsonify(movies_by_director), HTTPStatus.OK
 
 @app.route("/movie_by_user/<id_user>", methods=["GET"])
+@jwt_required()
 def movie_by_user(id_user):
     id_user = int(id_user)
 
@@ -156,9 +157,10 @@ def modificar_pelicula(id_movie):
 #endpoint elimina una pelicula
 #DELETE
 @app.route("/movie/<id_user>/<id_movie>", methods = ["DELETE"])
-@jwt_required()
+
 def eliminar_pelicula(id_user, id_movie):
     id_user = int(id_user)
+    id_movie = int(id_movie)
     elimino = False
     for movie in db['movies']:
         if movie['id_movie'] == int(id_movie) and movie['id_user'] == int(id_user):
@@ -171,8 +173,7 @@ def eliminar_pelicula(id_user, id_movie):
     if elimino:
         return jsonify({'msj':'Pelicula eliminada con exito'}), HTTPStatus.OK
     else:
-        return jsonify({}), HTTPStatus.BAD_REQUEST
-
+        return jsonify({'msj':'La pelicula no existe o el usuario creador es otro'}), HTTPStatus.BAD_REQUEST
 
 #endpoint crea un usuario nuevo
 @app.route("/register", methods = ["POST"])

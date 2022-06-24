@@ -1,4 +1,3 @@
-from ast import JoinedStr
 from flask import Flask, json, jsonify, request
 from http import HTTPStatus
 import json
@@ -120,13 +119,17 @@ def create_new_movie():
 
     if "name_movie" and "fecha_estreno" and "director" and "genero" and "sinopsis" and "url_img" and "id_user" in data_client:
         titulos = [movie["name_movie"] for movie in db["movies"]]
-    
+        id_user = int(data_client['id_user'])
+
         if data_client["name_movie"] in titulos:
             return ("Ya existe una pelicula con este nombre en nuestra base de datos"), HTTPStatus.BAD_REQUEST
         else:
             new_movie_id = max([movie["id_movie"] for movie in db["movies"]]) + 1
             data_client["id_movie"] = new_movie_id
-            db["movies"].append(data_client)
+            data_client["id_user"] = id_user
+            
+            data_client["id_comentarios"] = []
+            db["movies"].append(data_client) 
             return jsonify(data_client), HTTPStatus.OK
     
 
@@ -212,8 +215,9 @@ def generos():
 @app.route("/comentarios/<id_movie>", methods = ['GET'])
 def comentarios_movie(id_movie):
     ids_movies = [ m['id_movie'] for m in db['movies']]
+    print (ids_movies)
     if int(id_movie) not in ids_movies:
-        return jsonify({'msj':'Pelicula no encontrada'}), HTTPStatus.NOT_FOUND
+        return jsonify({'msj':'Pelicula no encontrada'}), HTTPStatus.NOT_FOUND 
     else:
         comentarios_movie = [c for c in db['comentarios'] if c['id_movie'] == int(id_movie)]
         print(comentarios_movie)

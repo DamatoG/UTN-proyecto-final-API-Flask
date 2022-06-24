@@ -23,19 +23,19 @@
             "genero":"",
             "sinopsis":"Después de los eventos devastadores de 'Avengers: Infinity War', el universo está en ruinas debido a las acciones de Thanos, el Titán Loco. Con la ayuda de los aliados que quedaron, los Vengadores deberán reunirse una vez más para intentar detenerlo y restaurar el orden en el universo de una vez por todas.",
             "url_img":"https://cdn.pixabay.com/photo/2020/11/28/03/19/iron-man-5783522_960_720.png",
-            "id_comentarios":[1,2,3]
+            "id_comentarios":[3]
             
         },
         {
             "id_movie":2,
-            "id_user":0,
+            "id_user":1,
             "name_movie":"Harry Potter y la piedra filosofal",
             "fecha_estreno":"2001",
             "director":"Chris Columbus",
             "genero":"Fantasia",
             "sinopsis":"El día de su cumpleaños, Harry Potter descubre que es hijo de dos conocidos hechiceros, de los que ha heredado poderes mágicos. Debe asistir a una famosa escuela de magia y hechicería, donde entabla una amistad con dos jóvenes que se convertirán en sus compañeros de aventura. Durante su primer año en Hogwarts, descubre que un malévolo y poderoso mago llamado Voldemort está en busca de una piedra filosofal que alarga la vida de quien la posee.",
             "url_img":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2SnzWqt2egO2iHzYMU5_ugM7_e1BYlFuY6AHhX-xfhKS5HLwc",
-            "id_comentarios":[]
+            "id_comentarios":[1,2,3]
         }
         ],
         
@@ -43,13 +43,13 @@
     "comentarios":[
         {
         "id_comentario":1,
-        "id_movie":0,
+        "id_movie":2,
         "id_user":0,
         "body":"Hola que tal"
         },
         {
         "id_comentario":2,
-        "id_movie":1,
+        "id_movie":2,
         "id_user":0,
         "body":"Hola que tal"
         },
@@ -57,7 +57,7 @@
         "id_comentario":3,
         "id_movie":1,
         "id_user":0,
-        "body":"Hola que tal"
+        "body":"Comentario pelicula 1"
         }],
     
     

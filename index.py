@@ -2,7 +2,7 @@ from flask import Flask, json, jsonify, request
 from http import HTTPStatus
 import json
 from flask_cors import CORS, cross_origin
-from flask_jwt import JWT, jwt_required
+
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import jwt_required
@@ -236,7 +236,10 @@ def crear_comentario(id_movie):
     #Valido data y que el id_movie exista
     if ('body' in data_client and 'id_user' in data_client):
         if id_movie in ids_movies:
-            new_comentario_id = max([c["id_comentario"] for c in db["comentarios"]]) + 1 
+            if len(db["comentarios"]) >1:    
+                new_comentario_id = max([c["id_comentario"] for c in db["comentarios"]]) + 1 
+            else:
+                new_comentario_id = 0
             for m in db['movies']:
                 if m['id_movie'] == id_movie:
                     m['id_comentarios'].append(new_comentario_id)
